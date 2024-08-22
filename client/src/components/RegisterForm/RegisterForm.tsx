@@ -10,8 +10,11 @@ export const RegisterFrom = () => {
 
     const [message, setMessage] = useState("")
 
-    function handleSubmit(){
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>){
+        event.preventDefault()
+
         if (confpass == password){
+            setMessage('')
             postUser({name, email, password, userid: crypto.randomUUID()})
         }
         else{
@@ -33,7 +36,7 @@ export const RegisterFrom = () => {
 
             <label htmlFor="conf-password">Confirm password</label>
             <input onChange={(event)=>setConfpass(event.target.value)} type="password" id="conf-password" />
-            {message != "" } : <p>{message}</p> ? <></>  
+            {message !== "" && <p>{message}</p>}
             <button>Singup</button>
         </form>
     </>)
