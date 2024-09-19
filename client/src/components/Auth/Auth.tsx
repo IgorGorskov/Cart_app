@@ -6,13 +6,16 @@ import { fetchMe } from "../../api/user";
 
 import { useNavigate } from "react-router-dom";
 
-let navigate = useNavigate()
+
 export const Auth = () => {
+
     const meQuery = useQuery({
         queryFn: ()=> fetchMe(),
         queryKey: ["users", "me"],
         retry: 0,
     }, queryClient);
+
+    let navigate = useNavigate()
 
     switch (meQuery.status) {
         case "pending":
@@ -33,11 +36,3 @@ export const Auth = () => {
     
 }
 
-{/* <BrowserRouter>
-                <Routes>
-                    <Route path="/" element=""></Route>
-                    <Route path="/card" element=""></Route>
-                    <Route path="/wishlist" element=""></Route>
-                    <Route path="/user" element=""></Route>
-                </Routes>
-            </BrowserRouter> */}
