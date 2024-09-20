@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 
 const dbFilePath = './db.json';
 const usersFilePath = "./users.json"
+const productsFilePath = "./products.json"
 
 const readFromDb = () => {
     try {
@@ -50,6 +51,17 @@ const writeUsersToFile = (users) => {
         console.error('Error writing to db.json:', error);
     }
 };
+
+const readProductsFromFile = () => {
+    try{
+        const data =  fs.readFileSync(productsFilePath, "utf8")
+        return JSON.parse(data)
+    }
+    catch(error){
+        console.error("Error reading products.json", error)
+        return []
+    }
+}
 
 let users = readUsersFromFile()
 
@@ -108,13 +120,18 @@ app.get('/me', async (req, res) => {
 })
 
 
+app.get('/products', (req, res) => {
+    const products = readProductsFromFile()
+    return res.status(200).json({status: "success", products: products})
+})
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Shop API!');
 });
 
 
 
-
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
