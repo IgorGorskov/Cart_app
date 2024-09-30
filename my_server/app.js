@@ -1,13 +1,28 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const app = express();
 const port = 3000;
 const cors = require('cors');
 const { error } = require('console');
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+
+app.use(session({
+    secret: 'supersecretkey', // Используйте надежный секретный ключ в реальных приложениях
+    resave: false, // Не сохранять сессию снова, если она не была изменена
+    saveUninitialized: false, // Не сохранять сессию, если она не была инициализирована
+    cookie: {
+      httpOnly: true, // Куки недоступны из JavaScript
+      secure: false, // Должно быть true, если используется HTTPS
+      maxAge: 1000 * 60 * 60 * 24 // Срок жизни куки 1 день
+    }
+  }));
 
 app.use(bodyParser.json());
 
@@ -15,28 +30,10 @@ const dbFilePath = './db.json';
 const usersFilePath = "./users.json"
 const productsFilePath = "./products.json"
 
-const readFromDb = () => {
-    try {
-        const data = fs.readFileSync(dbFilePath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Error reading db.json:', error);
-        return [];
-    }
-};
 
-
-const writeToDb = (items) => {
+const readUsersFromFile = async () => {
     try {
-        fs.writeFileSync(dbFilePath, JSON.stringify(items));
-    } catch (error) {
-        console.error('Error writing to db.json:', error);
-    }
-};
-
-const readUsersFromFile = () => {
-    try {
-        const data = fs.readFileSync(usersFilePath, 'utf8');
+        const data = await fs.readFile(usersFilePath, 'utf8');
         return JSON.parse(data);
     } catch (error) {
         console.error('Error reading users.json:', error);
@@ -44,17 +41,18 @@ const readUsersFromFile = () => {
     }
 };
 
-const writeUsersToFile = (users) => {
+const writeUsersToFile = async (users) => {
     try {
-        fs.writeFileSync(usersFilePath, JSON.stringify(users));
+        await fs.writeFile(usersFilePath, JSON.stringify(users));
     } catch (error) {
         console.error('Error writing to db.json:', error);
     }
 };
 
-const readProductsFromFile = () => {
+const readProductsFromFile = async () => {
     try{
-        const data =  fs.readFileSync(productsFilePath, "utf8")
+        const data = await fs.readFile(productsFilePath, "utf8")
+        console.log('read Products from ', productsFilePath)
         return JSON.parse(data)
     }
     catch(error){
@@ -62,6 +60,37 @@ const readProductsFromFile = () => {
         return []
     }
 }
+
+const readCartAndWishFromFile = async (userId = req.session.userId) => {
+    const filePath = `./users/${userId}.json`
+    try{
+        const data = await fs.readFile(filePath, "utf8")
+        console.log('read Cart And Wish form', filePath)
+        return JSON.parse(data)
+    }
+    catch(error){
+        console.log(`Error reading ${filePath}`, error)
+        return []
+    }
+}
+
+const writeCartAndWishFromFile = async (userid = req.session.userId, newData) => {
+    const filePath = `./users/${userid}.json`
+    try {
+        await fs.writeFile(filePath, JSON.stringify(newData));
+    } catch (error) {
+        console.log(`Error writing to ${filePath}:`, error);
+    }
+};
+
+const countSumCart = (array) => {
+    let sum = 0
+    array.forEach(element => {
+        sum += parseInt(element.cost)
+    });
+    return sum
+}
+
 
 let users = readUsersFromFile()
 
@@ -85,7 +114,6 @@ app.post('/users', (req, res) => {
 
 })
 
-let me = {}
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body
@@ -97,10 +125,13 @@ app.post('/login', async (req, res) => {
         
         let currentUser = users.find((user)=>{ return user.email === email })
         if (currentUser === undefined){
-            return res.status(402).json({ status: "user not exist" })
+            return res.status(404).json({ status: "user not exist" })
         }
         if(currentUser.password == password){
-            me = currentUser
+            req.session.userName = currentUser.name
+            req.session.userEmail = currentUser.email
+            req.session.userId = currentUser.userid;
+            console.log("userID", req.session.userId)
             return res.status(201).json({ status: "success" })
         }
         return res.status(401).json({ error: "uncorrect email or password" })
@@ -113,16 +144,56 @@ app.post('/login', async (req, res) => {
 
 
 app.get('/me', async (req, res) => {
-    if(Object.keys(me).length === 0){
-        return res.status(400).json({error: "error"})
-    }    
-    return res.status(200).json({status: "success", user: me})
+    if (!req.session.userId) { 
+        return res.status(401).json({ error: "none user sessionId" });
+    }   
+    return res.status(200).json({status: "success", user: {name: req.session.userName, email: req.session.userEmail, userid: req.session.userId}})
 })
 
 
-app.get('/products', (req, res) => {
-    const products = readProductsFromFile()
+
+app.get('/products', async (req, res) => {
+    const products = await readProductsFromFile()
     return res.status(200).json({status: "success", products: products})
+})
+
+app.post('/cart', async (req, res) => {
+    const products = await readProductsFromFile()
+    const { productId } = req.body
+    let product = products.find((product) => product.id === productId)
+    let cartAndWish = await readCartAndWishFromFile(req.session.userId)
+    cartAndWish.cart.push(product)
+    writeCartAndWishFromFile(req.session.userId, cartAndWish)
+    return res.status(200).json({starus: "success"})
+})
+
+app.get('/cart', async (req, res) => {
+    try{
+        if(!req.session.userId){
+            return res.status(200).json({status: "success", cart: []})
+        }
+        const { cart } = await readCartAndWishFromFile(req.session.userId)
+        return res.status(200).json({status: "success", cart, finalPrice: countSumCart(cart)})
+    }
+    catch(error){
+        console.log(error)
+        return res.status(401).json({status: "error", error})
+    }
+})
+
+app.delete("/cart", async (req, res) => {
+    try{
+        const { productId } = req.body
+        let cartAndWish = await readCartAndWishFromFile(req.session.userId)
+        console.log("remove id", productId)
+        cartAndWish.cart = cartAndWish.cart.filter(item => Number(item.id) !== Number(productId))
+        await writeCartAndWishFromFile(req.session.userId, cartAndWish)
+        return res.status(200).json({status: "succsess"})
+    }
+    catch(error){
+        console.log(error)
+        return res.status(400).json({status: "error", error})
+    }
 })
 
 app.get('/', (req, res) => {
@@ -135,3 +206,7 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
+// (async () => {
+//     const { cart } = await readCartAndWishFromFile()
+//     console.log(cart)
+// })()

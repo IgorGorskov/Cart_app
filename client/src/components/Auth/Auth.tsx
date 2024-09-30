@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { AuthForm } from "../AuthFrom/AuthForm"
-import { Header } from "../Header/Header"
 import { queryClient } from "../../queryClient";
 import { fetchMe } from "../../api/user";
 
@@ -23,8 +22,8 @@ export const Auth = () => {
 
         case "error":
             return( <>
-            <Header/>
-            <AuthForm/>
+                <AuthForm/>
+                <>error</>
             </>)
         case "success":
             navigate('/')

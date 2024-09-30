@@ -12,7 +12,7 @@ export const AuthForm = ()=>{
         <>
             <LoginForm/> 
             <label htmlFor="changeOnRegister"></label>
-            <button id="changeOnRegister" onClick={()=> setAuth("register")}>new account</button>
+            <button id="changeOnRegister" onClick={()=> setAuth("register")}>new account?</button>
         </>
         : 
         <>

@@ -1,1 +1,14 @@
-[{"id": "1", "title": "Product1", "img": "#", "cost": "1000$"}, {"id": "2", "title": "Product2", "img": "#", "cost": "200$"}, {"id": "3", "title": "Product3", "img": "#", "cost": "500$"}, {"id": "4", "title": "Product4", "img": "#", "cost": "100$"}, {"id": "5", "title": "Product5", "img": "#", "cost": "100$"}, {"id": "6", "title": "Product6", "img": "#", "cost": "150$"}, {"id": "7", "title": "Product7", "img": "#", "cost": "700$"}, {"id": "8", "title": "Product8", "img": "#", "cost": "200$"}, {"id": "10", "title": "Product10", "img": "#", "cost": "300$"}]
+[
+    {"id": "1", "title": "Product1", "img": "#", "cost": "1000"},
+    {"id": "2", "title": "Product2", "img": "#", "cost": "200"},
+    {"id": "3", "title": "Product3", "img": "#", "cost": "500"},
+    {"id": "4", "title": "Product4", "img": "#", "cost": "100"},
+    {"id": "5", "title": "Product5", "img": "#", "cost": "100"},
+    {"id": "6", "title": "Product6", "img": "#", "cost": "150"},
+    {"id": "7", "title": "Product7", "img": "#", "cost": "700"},
+    {"id": "8", "title": "Product8", "img": "#", "cost": "200"},
+    {"id": "9", "title": "Product9", "img": "#", "cost": "300"},
+    {"id": "10", "title": "Product10", "img": "#", "cost": "300"},
+    {"id": "11", "title": "Product11", "img": "#", "cost": "400"},
+    {"id": "12", "title": "Product12", "img": "#", "cost": "100"}
+]

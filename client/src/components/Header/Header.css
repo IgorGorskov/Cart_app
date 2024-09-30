@@ -1,6 +1,14 @@
 .header{
     display: flex;
-    
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 10px;
+    /* position: fixed;
+    top: 0; */
+    border-radius: 0 0 15px 15px;
+    /* border: 1px solid; */
+
+    background-color: #9c9c9c;
 }
 
 .header__logo{

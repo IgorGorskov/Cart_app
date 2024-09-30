@@ -1,11 +1,11 @@
 import './App.css'
-import { Main } from './components/Main/Main'
+import { MainContent } from './components/Main/Main'
 
 function App() {
 
   return (
     <>
-      <Main/>
+      <MainContent/>
     </>
   )
 }

@@ -14,3 +14,4 @@ export async function fetchProducts(): Promise<Product[]> {
         return []
     }
 }
+

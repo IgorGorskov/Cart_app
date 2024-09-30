@@ -8,7 +8,10 @@ interface ProductListProps {
 
 export const ProductList: React.FC<ProductListProps> = ({ products }) => {
     
-    return <ul className="product-list">
-        {products.map(product => <ProductCard key={product.id} product={product}/>)}
-    </ul>
+    return <>
+        <h2 className="proudct__title">Products</h2>
+        <ul className="product-list">
+            {products.map(product => <ProductCard key={product.id} product={product}/>)}
+        </ul>
+    </>
 }
