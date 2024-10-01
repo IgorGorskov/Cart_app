@@ -181,17 +181,17 @@ app.get('/cart', async (req, res) => {
     }
 })
 
-app.delete("/cart", async (req, res) => {
+app.delete('/cart/:productId', async (req, res) => {
     try{
-        const { productId } = req.body
+        const productId = req.params.productId
         let cartAndWish = await readCartAndWishFromFile(req.session.userId)
         console.log("remove id", productId)
         cartAndWish.cart = cartAndWish.cart.filter(item => Number(item.id) !== Number(productId))
         await writeCartAndWishFromFile(req.session.userId, cartAndWish)
-        return res.status(200).json({status: "succsess"})
+        return res.status(200).json({status: "success"})
     }
     catch(error){
-        console.log(error)
+        console.log("cart delete error:",error)
         return res.status(400).json({status: "error", error})
     }
 })
@@ -200,13 +200,61 @@ app.get('/', (req, res) => {
     res.send('Welcome to the Shop API!');
 });
 
+app.get('/wish', async (req, res) => {
+    if(!req.session.userId){
+        return res.status(200).json({status: "success", wishList: []})
+    }
+    try{
+        const { wishList } = await readCartAndWishFromFile(req.session.userId)
+        return res.status(200).json({status: "success", wishList})
+    }
+    catch(error){
+        console.log("server erorr read wishList")
+        return res.status(400).json({status: "error"})
+    }
+})
+
+app.post('/wish', async (req, res) => {
+    if(!req.session.userId){
+        return res.status(200).json({status: "success"})
+    }
+    try{
+        const { product } = req.body
+        let cartAndWish = await readCartAndWishFromFile(req.session.userId)
+        if(cartAndWish.wishList.includes(product)){
+            console.log('there is already')
+            return res.status(200).json({status: "success"})
+        }
+        cartAndWish.wishList.push(product)
+        writeCartAndWishFromFile(req.session.userId, cartAndWish)
+        return res.status(200).json({status: "success"})
+    }
+    catch(erorr){
+        console.log("wishList post error", erorr)
+        return res.status(400).json({status: "erorr"})
+    }
+})
+
+app.delete('/wish/:productId', async (req, res) => {
+    try{
+        const productId = req.params.productId
+        let cartAndWish = await readCartAndWishFromFile(req.session.userId)
+        console.log("remove wish id", productId)
+        cartAndWish.wishList = cartAndWish.wishList.filter(item => Number(item.id) !== Number(productId))
+        await writeCartAndWishFromFile(req.session.userId, cartAndWish)
+        return res.status(200).json({status: "success"})
+    }
+    catch(erorr){
+        console.log("wishList delete error:", erorr)
+        return res.status(400).json({status: "erorr"})
+    }
+})
 
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-// (async () => {
-//     const { cart } = await readCartAndWishFromFile()
-//     console.log(cart)
-// })()
+        // if(!cartAndWish.wishList.some(item => Number(item.id) === Number(productId))){
+        //     return res.status(200).json({status: "success"})
+        // }

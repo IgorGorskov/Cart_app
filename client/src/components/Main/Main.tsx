@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { Product } from "../ProductCard/ProductCard"
 import { Header } from "../Header/Header"
 import { CartProductList } from "../CartProductList/CartProductList"
+import { WishList } from "../WishList/WishList"
 
 export const MainContent = () => {
     
@@ -53,7 +54,7 @@ export const MainContent = () => {
                 : (<ProductList products={products || []}/>)
             }></Route>
             <Route path="/cart" element={<CartProductList/>}></Route>
-            <Route path="/wishlist" element=""></Route>
+            <Route path="/wishlist" element={<WishList/>}></Route>
             <Route path="/user" element=""></Route>
             <Route path="/login" element={<Auth/>}></Route>
         </Routes>

@@ -9,6 +9,7 @@ interface CartProductCardProps {
 export const CartProductCard:React.FC<CartProductCardProps> = ({ product }) => {
     async function handleRemoveCard(){
         await removeCartProduct(product.id)
+        console.log('uploading cart...')
         queryClient.invalidateQueries({ queryKey: ['cart'] })
     }
 

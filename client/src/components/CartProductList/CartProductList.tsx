@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+
 import { fetchCart } from "../../api/user"
 import { CartProductCard } from "../CartProductCard/CartProductCard"
 import "./CartProductList.css"
@@ -7,20 +7,17 @@ import { queryClient } from "../../queryClient"
 import { Product } from "../ProductCard/ProductCard"
 
 
-export const CartProductList: React.FC = () =>{
-
-
+export const CartProductList: React.FC = () => {
     const {isLoading, isError, data} = useQuery({queryFn: () => fetchCart(), queryKey: ['cart']}, queryClient)
 
     const cart: Product[] = data?.cart ?? []
     const finalPrice = data?.finalPrice ?? 0
 
-
     if(isLoading){
-        return <>loading</>
+        return <>loading...</>
     }
     if(isError){
-        return <>error</>
+        return <>error...</>
     }
     if(cart.length !== 0){
         return <>
@@ -37,5 +34,4 @@ export const CartProductList: React.FC = () =>{
             Cart is empty
         </>
     }
-    
 }

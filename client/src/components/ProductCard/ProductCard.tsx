@@ -24,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps>  = ( {product} ) => {
     }, queryClient)
 
     const wishMutation = useMutation({
-        mutationFn: () => addWish(product.id),
+        mutationFn: () => addWish(product),
         onSuccess(){
             queryClient.invalidateQueries({queryKey: ["wish"]})
         }
