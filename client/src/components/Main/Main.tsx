@@ -8,6 +8,8 @@ import { Product } from "../ProductCard/ProductCard"
 import { Header } from "../Header/Header"
 import { CartProductList } from "../CartProductList/CartProductList"
 import { WishList } from "../WishList/WishList"
+import { useAuth } from "../../Context"
+import { User } from "../User/User"
 
 export const MainContent = () => {
     
@@ -34,29 +36,30 @@ export const MainContent = () => {
         loadProducts()
     }, [])
     
-
+    const {isAuthed } = useAuth()
 
     return <BrowserRouter>
-        <Header>
-            <nav>
-                <Link className="nav__link" to="/">main</Link>
-                <Link className="nav__link" to="/cart">cart</Link>
-                <Link className="nav__link" to="/wishlist">wishlist</Link>
-                <Link className="nav__link" to="/user">user</Link>
-                <Link className="nav__link" to="/login">login</Link>
-            </nav>
-        </Header>
-        
-        <Routes>
-            <Route path="/" element={
-                isLoading ? (<p>loading</p>)
-                : isError ? (<p>error</p>)
-                : (<ProductList products={products || []}/>)
-            }></Route>
-            <Route path="/cart" element={<CartProductList/>}></Route>
-            <Route path="/wishlist" element={<WishList/>}></Route>
-            <Route path="/user" element=""></Route>
-            <Route path="/login" element={<Auth/>}></Route>
-        </Routes>
-    </BrowserRouter>
+                <Header>
+                    <nav>
+                        <Link className="nav__link" to="/">main</Link>
+                        <Link className="nav__link" to="/cart">cart</Link>
+                        <Link className="nav__link" to="/wishlist">wishlist</Link>
+                        {isAuthed ? <Link className="nav__link" to="/user">user</Link> 
+                        : <Link className="nav__link" to="/login">login</Link>}                    
+                    </nav>
+                </Header>
+                
+                <Routes>
+                    <Route path="/" element={
+                        isLoading ? (<p>loading</p>)
+                        : isError ? (<p>error</p>)
+                        : (<ProductList products={products || []}/>)
+                    }></Route>
+                    <Route path="/cart" element={<CartProductList/>}></Route>
+                    <Route path="/wishlist" element={<WishList/>}></Route>
+                    <Route path="/user" element={<User/>}></Route>
+                    <Route path="/login" element={<Auth/>}></Route>
+                </Routes>
+            </BrowserRouter>
+
 }

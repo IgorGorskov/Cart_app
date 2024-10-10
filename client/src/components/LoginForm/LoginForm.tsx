@@ -1,17 +1,21 @@
 import { useMutation } from "@tanstack/react-query"
 import { FormEventHandler, useState } from "react"
-import { loginUser } from "../../api/user"
+import { fetchMe, loginUser } from "../../api/user"
 import { queryClient } from "../../queryClient"
+import { useAuth } from "../../Context"
 
 export const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const [message, setMessage] = useState('')
+    const { login } = useAuth()
 
     const loginMutation = useMutation({
         mutationFn: () => loginUser({email, password}),
-        onSuccess(){
+        onSuccess: async () => {
+            const { user } = await fetchMe()
+            login(user)
             queryClient.invalidateQueries({queryKey: ["users", "me"]})
         }
     }, queryClient)

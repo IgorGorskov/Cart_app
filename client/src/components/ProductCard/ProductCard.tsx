@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { addProduct, addWish } from "../../api/user"
+import { addProduct, addWish } from "../../api/product"
 import "./ProductCard.css"
 import { queryClient } from "../../queryClient"
 
@@ -41,7 +41,7 @@ export const ProductCard: React.FC<ProductCardProps>  = ( {product} ) => {
     return <li className="product-card">
         <img src={product.img} alt="img_prod" />
         <h3>{product.title}</h3>
-        <p>{product.cost}</p>
+        <p>{product.cost} $</p>
         <div className="proudct__buttonbox" style={{display: "flex"}}>
             <button className="proudct__button" onClick={addToBuyCart}>buy</button>
             <button className="proudct__button" onClick={addToWishList}>wish</button>

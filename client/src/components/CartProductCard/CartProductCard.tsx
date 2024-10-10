@@ -1,4 +1,4 @@
-import { removeCartProduct } from "../../api/user";
+import { removeCartProduct } from "../../api/product";
 import { queryClient } from "../../queryClient";
 import { Product } from "../ProductCard/ProductCard";
 import "./CartProudctCard.css"

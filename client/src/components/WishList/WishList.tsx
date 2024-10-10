@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Product } from "../ProductCard/ProductCard"
 import { WishCard } from "../WishCard/WishCard"
-import { fetchWish } from "../../api/user"
+import { fetchWish } from "../../api/product"
 import { queryClient } from "../../queryClient"
 import "./WishList.css"
 

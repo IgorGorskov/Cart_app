@@ -1,11 +1,15 @@
 import './App.css'
 import { MainContent } from './components/Main/Main'
+import { MainProvider } from './Context'
 
 function App() {
 
   return (
     <>
-      <MainContent/>
+      <MainProvider>
+        <MainContent/>
+      </MainProvider>
+      
     </>
   )
 }

@@ -141,7 +141,18 @@ app.post('/login', async (req, res) => {
     }
 })
 
-
+app.delete('/logout', (req, res) => {
+    if (!req.session.userId) { 
+        return res.status(401).json({ error: "none user sessionId" });
+    }   
+    req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: "Failed to destroy session" });
+        }
+    
+        return res.status(200).json({ status: "success" });
+      });
+})
 
 app.get('/me', async (req, res) => {
     if (!req.session.userId) { 

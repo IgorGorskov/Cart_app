@@ -1,5 +1,5 @@
 
-import { fetchCart } from "../../api/user"
+import { fetchCart } from "../../api/product"
 import { CartProductCard } from "../CartProductCard/CartProductCard"
 import "./CartProductList.css"
 import { useQuery } from "@tanstack/react-query"

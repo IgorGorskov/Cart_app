@@ -1,7 +1,7 @@
 import { Product } from "../ProductCard/ProductCard"
 import "./WishCard.css"
 import { queryClient } from "../../queryClient"
-import { removeWish } from "../../api/user"
+import { removeWish } from "../../api/product"
 interface WishCardProps {
     product: Product
 }
