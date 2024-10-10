@@ -18,7 +18,7 @@ export const WishList: React.FC = () => {
     if(isError){
         return <p>error...</p>
     }
-    if(data){
+    if(data.wishList.length !== 0){
         return <>
             <h2>
                 WishList

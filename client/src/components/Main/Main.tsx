@@ -22,7 +22,6 @@ export const MainContent = () => {
             try{
                 const prods = await fetchProducts()
                 setProducts(prods)
-                console.log(products)
                 setIserror(false)
             }
             catch(error){
