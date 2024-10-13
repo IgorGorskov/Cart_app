@@ -27,10 +27,7 @@ export const Auth = () => {
             return <p>Loading...</p>
 
         case "error":
-            return( <>
-                <AuthForm/>
-                <>error</>
-            </>)
+            return <AuthForm/>
         case "success":
             return null
         default:

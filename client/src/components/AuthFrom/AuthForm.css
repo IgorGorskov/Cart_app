@@ -1,4 +1,6 @@
 .form{
+    max-width: 540px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
@@ -9,4 +11,12 @@ label{
 
 input{
     flex-basis: content;
+}
+
+.auth__chandge-button{
+    
+    border: none;
+    font-weight: 500;
+    color: var(--link-color);
+    background-color: transparent;
 }

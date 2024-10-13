@@ -40,11 +40,11 @@ export const MainContent = () => {
     return <BrowserRouter>
                 <Header>
                     <nav>
-                        <Link className="nav__link" to="/">main</Link>
-                        <Link className="nav__link" to="/cart">cart</Link>
-                        <Link className="nav__link" to="/wishlist">wishlist</Link>
-                        {isAuthed ? <Link className="nav__link" to="/user">user</Link> 
-                        : <Link className="nav__link" to="/login">login</Link>}                    
+                        <Link className="header__link" to="/">main</Link>
+                        <Link className="header__link" to="/cart">cart</Link>
+                        <Link className="header__link" to="/wishlist">wishlist</Link>
+                        {isAuthed ? <Link className="header__link" to="/user">user</Link> 
+                        : <Link className="header__link" to="/login">login</Link>}                    
                     </nav>
                 </Header>
                 

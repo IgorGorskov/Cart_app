@@ -6,22 +6,22 @@ import "./AuthForm.css"
 export const AuthForm = ()=>{
     const [auth, setAuth] = useState("login")
 
-    return(<>
+    return(<div className="auth">
         {auth === "login" 
         ? 
         <>
             <LoginForm/> 
             <label htmlFor="changeOnRegister"></label>
-            <button id="changeOnRegister" onClick={()=> setAuth("register")}>new account?</button>
+            <button className="auth__chandge-button" id="changeOnRegister" onClick={()=> setAuth("register")}>new account?</button>
         </>
         : 
         <>
             <RegisterFrom/>
             <label htmlFor="changeOnLogin"></label>
-            <button id="changeOnLogin" onClick={()=> setAuth("login")}>Login</button>
+            <button className="auth__chandge-button" id="changeOnLogin" onClick={()=> setAuth("login")}>Login</button>
         </>
         
         }    
         
-    </>)
+    </div>)
 }

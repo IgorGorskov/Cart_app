@@ -43,7 +43,7 @@ export const ProductCard: React.FC<ProductCardProps>  = ( {product} ) => {
         <h3>{product.title}</h3>
         <p>{product.cost} $</p>
         <div className="proudct__buttonbox" style={{display: "flex"}}>
-            <button className="proudct__button" onClick={addToBuyCart}>buy</button>
+            <button className="proudct__button buy-button" onClick={addToBuyCart}>buy</button>
             <button className="proudct__button" onClick={addToWishList}>wish</button>
         </div>
     </li>

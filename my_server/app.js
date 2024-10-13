@@ -125,7 +125,7 @@ app.post('/login', async (req, res) => {
         
         let currentUser = users.find((user)=>{ return user.email === email })
         if (currentUser === undefined){
-            return res.status(404).json({ status: "user not exist" })
+            return res.status(404).json({ error: "user not exist" })
         }
         if(currentUser.password == password){
             req.session.userName = currentUser.name

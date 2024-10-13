@@ -1,5 +1,3 @@
-import { Product } from "../components/ProductCard/ProductCard";
-
 export interface User {
     userid: string,
     password: string,
@@ -19,35 +17,55 @@ export function postUser (user: User){
             'Content-type': 'application/json; charset=UTF-8'
         },
         body: JSON.stringify(user)
-    }).then(response => response.json()).catch(error => console.log(error))
+    }).then( async (response) => {
+        const data = await response.json()
+
+        if(!response.ok){
+            throw new Error(data.erorr)
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+        throw error
+    })
 }
 
 export async function loginUser (login: Login): Promise<void> {
-    return  fetch("http://localhost:3000/login", {
+    return fetch("http://localhost:3000/login", {
         method: "POST",
         credentials: 'include',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(login)
-    }).then((response) => {response.json(); console.log("successful login", response.status)}).catch(error => console.error(error))
+    }).then( async (response) => {
+        const data = await response.json()
+        if(!response.ok){
+            throw new Error(data.error)
+        }
+    })
+    .catch(error => {
+        console.error("loginUser:", error.message)
+        throw error
+    })
 }
 
-
-export async function fetchMe(){
-    const response = await fetch("http://localhost:3000/me",{
+export async function fetchMe(): Promise<User>{
+    return fetch("http://localhost:3000/me",{
         method: "GET",
         credentials: 'include'
-    })
-    try{
+    }).then(async (response) => {
+        const data = await response.json()
+
         if(!response.ok){
-            throw new Error("no user")
+            throw new Error(data.erorr)
         }
-        return response.json()
-    }
-    catch(error){
-        console.error("error fetchMe", error)
-    }
+        return data.user
+    })
+    .catch((error) => {
+        console.log("error fetchMe", error.message)
+        throw error
+    })
 }
 
 export async function logutUser() {
@@ -55,5 +73,15 @@ export async function logutUser() {
         method: "DELETE",
         credentials: "include",
 
-    }).then(response => response.json()).catch(error => console.log("error logoutUser:", error))
+    }).then(async (response) => {
+        const data = await response.json()
+
+        if(!response.ok){
+            throw data.erorr
+        }
+    })
+    .catch((error) => {
+        console.log("error logoutUser:", error)
+        throw error
+    })
 }

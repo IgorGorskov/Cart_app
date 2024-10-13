@@ -23,14 +23,24 @@ export async function addProduct(productId: string) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({productId})
-    }).then(response => response.json()).catch(error => console.error(error));
+    }).then(async (response) => {
+        if(!response.ok){
+            throw new Error("addProduct erorr")
+        }
+    }).catch(error => console.error(error));
 }
 
 export async function fetchCart() {
     return fetch("http://localhost:3000/cart", {
         method: "GET",
         credentials: "include",
-    }).then(response => response.json()).catch(error => console.error("fetchCart: ", error))
+    }).then(async (response) => {
+        const data = response.json()
+        if(!response.ok){
+            throw new Error("fetchCart error")
+        }
+        return data
+    }).catch(error => console.error(error))
 }
 
 export async function removeCartProduct(productId: string) {
@@ -55,7 +65,13 @@ export async function fetchWish() {
     return fetch("http://localhost:3000/wish", {
         method: "GET",
         credentials: "include",
-    }).then(response => response.json()).catch(error => console.log(error))
+    }).then(async (response) => {
+        const data = response.json()
+        if(!response.ok){
+            throw new Error("fetchWish error")
+        }
+        return data
+    }).catch(error => console.error(error))
 }
 
 export async function removeWish(productId: string) {

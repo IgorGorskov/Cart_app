@@ -14,9 +14,16 @@ export const LoginForm = () => {
     const loginMutation = useMutation({
         mutationFn: () => loginUser({email, password}),
         onSuccess: async () => {
-            const { user } = await fetchMe()
+            setMessage('')
+            const user  = await fetchMe()
             login(user)
             queryClient.invalidateQueries({queryKey: ["users", "me"]})
+        },
+        onError: (error)=>{
+            console.log(error)
+            if(error.message === "user no exist"){
+                setMessage('User not exist')
+            }
         }
     }, queryClient)
 
