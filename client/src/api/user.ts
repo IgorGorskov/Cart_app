@@ -10,78 +10,81 @@ export interface Login{
     password: string,
 }
 
-export function postUser (user: User){
-    fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    }).then( async (response) => {
-        const data = await response.json()
+export async function postUser(user: User): Promise<void> {
+    try {
+        const response = await fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+        const data = await response.json();
 
-        if(!response.ok){
-            throw new Error(data.erorr)
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to post user');
         }
-    })
-    .catch((error) => {
-        console.error(error)
-        throw error
-    })
+    } catch (error) {
+        console.error('postUser:', error);
+        throw error;
+    }
 }
 
-export async function loginUser (login: Login): Promise<void> {
-    return fetch("http://localhost:3000/login", {
-        method: "POST",
-        credentials: 'include',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(login)
-    }).then( async (response) => {
-        const data = await response.json()
-        if(!response.ok){
-            throw new Error(data.error)
+export async function loginUser(login: Login): Promise<void> {
+    try {
+        const response = await fetch("http://localhost:3000/login", {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(login)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Login failed');
         }
-    })
-    .catch(error => {
-        console.error("loginUser:", error.message)
-        throw error
-    })
+    } catch (error) {
+        console.error("loginUser:", error);
+        throw error;
+    }
 }
 
-export async function fetchMe(): Promise<User>{
-    return fetch("http://localhost:3000/me",{
-        method: "GET",
-        credentials: 'include'
-    }).then(async (response) => {
-        const data = await response.json()
+export async function fetchMe(): Promise<User> {
+    try {
+        const response = await fetch("http://localhost:3000/me", {
+            method: "GET",
+            credentials: 'include'
+        });
 
-        if(!response.ok){
-            throw new Error(data.erorr)
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch user data');
         }
-        return data.user
-    })
-    .catch((error) => {
-        console.log("error fetchMe", error.message)
-        throw error
-    })
+        return data.user;
+    } catch (error) {
+        console.error("error fetchMe", error);
+        throw error;
+    }
 }
 
-export async function logoutUser() {
-    return fetch('http://localhost:3000/logout', {
-        method: "DELETE",
-        credentials: "include",
+export async function logoutUser(): Promise<void> {
+    try {
+        const response = await fetch('http://localhost:3000/logout', {
+            method: "DELETE",
+            credentials: "include",
+        });
 
-    }).then(async (response) => {
-        const data = await response.json()
+        const data = await response.json();
 
-        if(!response.ok){
-            throw data.erorr
+        if (!response.ok) {
+            throw new Error(data.error || 'Logout failed');
         }
-    })
-    .catch((error) => {
-        console.log("error logoutUser:", error)
-        throw error
-    })
+    } catch (error) {
+        console.error("error logoutUser:", error);
+        throw error;
+    }
 }

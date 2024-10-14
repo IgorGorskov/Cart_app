@@ -18,8 +18,9 @@ export const User: FC = () => {
 
     function handleClick () {
         logoutUser()
-        logout()
         queryClient.invalidateQueries({queryKey: ["users", "me"]});
+        logout()
+        
     }
 
     
