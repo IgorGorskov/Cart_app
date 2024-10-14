@@ -68,7 +68,7 @@ export async function fetchMe(): Promise<User>{
     })
 }
 
-export async function logutUser() {
+export async function logoutUser() {
     return fetch('http://localhost:3000/logout', {
         method: "DELETE",
         credentials: "include",

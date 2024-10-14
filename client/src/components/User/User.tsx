@@ -1,7 +1,8 @@
 import { FC, useEffect } from "react";
 import { useAuth } from "../../Context";
-import { logutUser } from "../../api/user";
+import { logoutUser } from "../../api/user";
 import { useNavigate } from "react-router-dom";
+import { queryClient } from "../../queryClient";
 
 
 
@@ -16,13 +17,13 @@ export const User: FC = () => {
     }, [user, navigate])
 
     function handleClick () {
-        logutUser()
+        logoutUser()
         logout()
+        queryClient.invalidateQueries({queryKey: ["users", "me"]});
     }
 
     
     if(user){
-        console.log(user)
         return <>
             <h3>User</h3>
             <p>{user.name}</p>
