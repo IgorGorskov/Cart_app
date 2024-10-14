@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { postUser } from "../../api/user"
+import { useNavigate } from "react-router-dom"
 
 export const RegisterFrom = () => {
 
@@ -7,15 +8,35 @@ export const RegisterFrom = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confpass, setConfpass] = useState("")
-
+    const navigate = useNavigate()
     const [message, setMessage] = useState("")
+    const [isSubmited, setSubmited] = useState(false)
+
+    useEffect(()=>{
+        if(isSubmited){
+            navigate('/login')
+            setSubmited(false)
+        }
+    }, [navigate, isSubmited])
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault()
 
         if (confpass == password){
+            try{
+                postUser({name, email, password, userid: crypto.randomUUID()})
+            }
+            catch(error){
+                if (error instanceof Error) {
+                    const message = error.message;
+                    setMessage(message);
+                } else {
+                    setMessage('Unknown error occurred');
+                }
+            }
             setMessage('')
-            postUser({name, email, password, userid: crypto.randomUUID()})
+            setSubmited(true)
+            
         }
         else{
             setMessage('Passwords not matched')

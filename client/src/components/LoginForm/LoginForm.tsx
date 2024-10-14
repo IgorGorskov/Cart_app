@@ -21,9 +21,7 @@ export const LoginForm = () => {
         },
         onError: (error)=>{
             console.log(error)
-            if(error.message === "user no exist"){
-                setMessage('User not exist')
-            }
+            setMessage(error.message)
         }
     }, queryClient)
 

@@ -92,24 +92,31 @@ const countSumCart = (array) => {
 }
 
 
-let users = readUsersFromFile()
 
-app.post('/users', (req, res) => {
 
+app.post('/users', async (req, res) => {
     try{
         const { name, password, email, userid } = req.body;
         if(!name || !password || !email || !userid){
             return res.status(400).json({error: "All fields are required"})
         }
         const newUser = {name, password, email, userid}
+        let users = await readUsersFromFile()
+        if(JSON.stringify(users)
+            .includes(
+                JSON.stringify(newUser)
+        )){
+            return res.status(400).json({error: "User already registered"})
+        }
         users.push(newUser)
 
-        writeUsersToFile(users)
+        await writeUsersToFile(users)
+        await fs.writeFile(`./users/${userid}.json`, JSON.stringify({"wishList": [], "cart": []}))
 
-        res.status(201).json({ message: "User was registered" })
+        return res.status(201).json({status: "success", message: "User was registered" })
     }
     catch(error){
-        res.status(500).json({error: "Unknow error"})
+        return res.status(500).json({error: "Unknow error"})
     }
 
 })
